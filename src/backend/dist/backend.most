@@ -1,0 +1,120 @@
+// Version: 4.0.0
+type AccessControlState__201339279 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__230067015<Principal, UserRole__91647283>
+  };
+type AttendanceRecord__667722748 =
+  {
+    clockIn : Int;
+    clockInPosition : GpsPosition__263564964;
+    clockInSelfie : Blob;
+    clockOut : ?Int;
+    clockOutPosition : ?GpsPosition__263564964;
+    clockOutSelfie : ?Blob;
+    day : Text;
+    id : Nat;
+    locationId : Nat;
+    user : Principal
+  };
+type AttendanceRecord__699091857 =
+  {
+    clockIn : Timestamp__591943523;
+    clockInPosition : GpsPosition__426083085;
+    clockInSelfie : ExternalBlob__220559234;
+    clockOut : ?Timestamp__591943523;
+    clockOutPosition : ?GpsPosition__426083085;
+    clockOutSelfie : ?ExternalBlob__220559234;
+    day : DayKey__588561373;
+    id : Nat;
+    locationId : Nat;
+    user : UserId__154395843
+  };
+type Data__44217153<K, V> = {var count : Nat__227979830; kvs : [var ?(K, V)]};
+type DayKey__453116133 = Text;
+type DayKey__588561373 = DayKey__453116133;
+type ExternalBlob__220559234 = Blob;
+type GpsPosition__263564964 =
+  {accuracyMeters : Float; latitude : Float; longitude : Float};
+type GpsPosition__426083085 =
+  {
+    accuracyMeters : Float;
+    latitude : Latitude__776227451;
+    longitude : Longitude__5770591
+  };
+type Internal__283199666<K, V> =
+  {children : [var ?Node__204828119<K, V>]; data : Data__44217153<K, V>};
+type Latitude__479276313 = Float;
+type Latitude__776227451 = Latitude__479276313;
+type Leaf__598469445<K, V> = {data : Data__44217153<K, V>};
+type List__355132335<T> =
+  {
+    var blockIndex : Nat__227979830;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__227979830
+  };
+type List__836382695<T> = List__355132335<T>;
+type Longitude__5770591 = Longitude__997816030;
+type Longitude__997816030 = Float;
+type Map__230067015<K, V> = Map__405889023<K, V>;
+type Map__405889023<K, V> = Map__603270868<K, V>;
+type Map__603270868<K, V> =
+  {var root : Node__204828119<K, V>; var size : Nat__227979830};
+type Nat__227979830 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__769816496 =
+  {
+    accessControlState : AccessControlState__201339279;
+    attendanceRecords : List__836382695<AttendanceRecord__667722748>;
+    counters : {var nextAttendanceId : Nat; var nextLocationId : Nat};
+    workLocations : List__836382695<WorkLocation__717289433>
+  };
+type Node__204828119<K, V> =
+  {#internal : Internal__283199666<K, V>; #leaf : Leaf__598469445<K, V>};
+type OldActor__512397517 = {};
+type RadiusMeters__16314099 = RadiusMeters__981561381;
+type RadiusMeters__981561381 = Nat;
+type Timestamp__301639476 = Int;
+type Timestamp__591943523 = Timestamp__301639476;
+type UserId__154395843 = UserId__158757552;
+type UserId__158757552 = Principal;
+type UserRole__91647283 = {#admin; #guest; #user};
+type WorkLocation__1062878901 =
+  {
+    id : Nat;
+    latitude : Latitude__776227451;
+    longitude : Longitude__5770591;
+    name : Text;
+    radiusMeters : RadiusMeters__16314099
+  };
+type WorkLocation__717289433 =
+  {
+    id : Nat;
+    latitude : Float;
+    longitude : Float;
+    name : Text;
+    radiusMeters : Nat
+  };
+{
+  "00000000_000000" : OldActor__512397517 -> NewActor__769816496
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__230067015<Principal, UserRole__91647283>
+    };
+  stable attendanceRecords :
+    {
+      var blockIndex : Nat__227979830;
+      var blocks : [var [var ?AttendanceRecord__699091857]];
+      var elementIndex : Nat__227979830
+    };
+  stable counters : {var nextAttendanceId : Nat; var nextLocationId : Nat};
+  stable workLocations :
+    {
+      var blockIndex : Nat__227979830;
+      var blocks : [var [var ?WorkLocation__1062878901]];
+      var elementIndex : Nat__227979830
+    }
+};

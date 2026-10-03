@@ -1,0 +1,180 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type WorkLocation = 
+ record {
+   id: nat;
+   latitude: Latitude;
+   longitude: Longitude;
+   name: text;
+   radiusMeters: RadiusMeters;
+ };
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserId = principal;
+type TodayStatus = 
+ variant {
+   clockedIn: record {clockIn: Timestamp;};
+   clockedOut: record {
+                 clockIn: Timestamp;
+                 clockOut: Timestamp;
+               };
+   notClockedIn;
+ };
+type Timestamp = int;
+type Result__1 = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type Result_4 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result_3 = 
+ variant {
+   err: AttendanceError;
+   ok: AttendanceView;
+ };
+type Result_2 = 
+ variant {
+   err: LocationError;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: LocationError;
+   ok: vec AttendanceView;
+ };
+type Result = 
+ variant {
+   err: LocationError;
+   ok: WorkLocation;
+ };
+type RadiusMeters = nat;
+type Longitude = float64;
+type LocationError = 
+ variant {
+   invalidLocation;
+   notAdmin;
+   notFound: nat;
+ };
+type Latitude = float64;
+type GpsPosition = 
+ record {
+   accuracyMeters: float64;
+   latitude: Latitude;
+   longitude: Longitude;
+ };
+type ExternalBlob = blob;
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DayKey = text;
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type AttendanceView = 
+ record {
+   clockIn: Timestamp;
+   clockInPosition: GpsPosition;
+   clockInSelfie: ExternalBlob;
+   clockOut: opt Timestamp;
+   clockOutPosition: opt GpsPosition;
+   clockOutSelfie: opt ExternalBlob;
+   day: DayKey;
+   id: nat;
+   locationId: nat;
+   user: UserId;
+ };
+type AttendanceError = 
+ variant {
+   alreadyClockedIn;
+   alreadyClockedOut;
+   invalidCoordinates;
+   noLocationConfigured;
+   notClockedIn;
+   notRegistered;
+   outsideRadius:
+    record {
+      distanceMeters: float64;
+      radiusMeters: RadiusMeters;
+    };
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result_4);
+  _internet_identity_sign_in_start: () -> (blob);
+  addWorkLocation: (name: text, latitude: Latitude, longitude: Longitude,
+   radiusMeters: RadiusMeters) -> (Result);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  clockIn: (position: GpsPosition, selfie: ExternalBlob) -> (Result_3);
+  clockOut: (position: GpsPosition, selfie: ExternalBlob) -> (Result_3);
+  deleteWorkLocation: (id: nat) -> (Result_2);
+  execute: (qJson: text) -> (Result__1) query;
+  /// Static Markdown documentation of the public backend API.
+  getApiDoc: () -> (text) query;
+  getAttendanceRecap: (day: opt DayKey, user: opt UserId) -> (Result_1) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getMyAttendance: () -> (vec AttendanceView) query;
+  getTodayStatus: () -> (TodayStatus) query;
+  isCallerAdmin: () -> (bool) query;
+  listWorkLocations: () -> (vec WorkLocation) query;
+  schema: () -> (text) query;
+  updateWorkLocation: (id: nat, name: text, latitude: Latitude, longitude:
+   Longitude, radiusMeters: RadiusMeters) -> (Result);
+}

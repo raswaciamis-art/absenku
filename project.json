@@ -1,0 +1,20 @@
+{
+  "overview": "Aplikasi absensi kehadiran karyawan dengan pencatatan jam masuk dan jam keluar, verifikasi lokasi GPS, dan selfie wajib via kamera.",
+  "features": [
+    "Absen masuk dan absen keluar dengan pencatatan jam otomatis",
+    "Verifikasi lokasi GPS dengan radius lokasi kerja",
+    "Selfie wajib via kamera depan sebelum absen",
+    "Riwayat absensi pribadi dengan foto dan lokasi",
+    "Pengelolaan lokasi kerja oleh admin",
+    "Rekap kehadiran seluruh karyawan dengan filter"
+  ],
+  "category": "attendance-app",
+  "tags": [
+    "absensi",
+    "kehadiran",
+    "gps",
+    "selfie",
+    "produktivitas"
+  ],
+  "last_updated": "2026-10-03T15:01:25.916Z"
+}
